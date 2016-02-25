@@ -126,81 +126,6 @@
 <!----------update form------------->
 
 
-<p id="update_output" ></p>
-<form id="form_std_update" name="form_std_update" method="post" >
-<table cellpadding="5" cellspacing="5">
-
-	
-    <tr><th>Id</th>
-	<td><input type="text" id="std_id" name="std_id" placeholder="Registration Id" value="<?= $_GET['Id']; ?> "  required/></td></tr>
-    
-    <div class="form_detail">
-    <input type="text" id="std_fname" name="std_fname" placeholder="First Name"  required/>
-    </div>
-    <div class="form_detail">
-    <input type="text" id="std_lname" name="std_lname" placeholder="Last Name"  required/>
-    </div>
-    <div class="form_detail">
-    <input type="text" id="std_cnic" name="std_cnic" placeholder="CNIC Or B-Form"  required/>
-    </div>
-    <br/>
-    <div class="form_detail">
-    <label>Gender:</label>
-    <input type = "radio" id = "std_gender" name = "std_gender"  value = "Female" required><gender>Female</gender>
-	<input type = "radio" id = "std_gender" name = "std_gender" value = "Male" required><gender>Male</gender>
-    </div>
-    <br/>
-    <div class="form_detail">
-    <label>Date of Birth:</label>
-    <select id = "DOB" name="yearOfBirth" require>
-		<option value="">Year</option>
-			<?php for ($i = 1980; $i < date('Y'); $i++) : ?>
-		<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-			<?php endfor; ?>
-	</select>
-	<select id = "DOB" name="monthOfBirth">
-		<option value="">Month</option>
-			<?php for ($i = 1; $i <= 12; $i++) : ?>
-		<option value="<?php echo ($i < 10) ? '0'.$i : $i; ?>"><?php echo $i; ?></option>
-			<?php endfor; ?>
-	</select>
-	<select id = "DOB" name="dateOfBirth">
-		<option value="">Date</option>
-			<?php for ($i = 1; $i <= 31; $i++) : ?>
-		<option value="<?php echo ($i < 10) ? '0'.$i : $i; ?>"><?php echo $i; ?></option>
-			<?php endfor; ?>
-	</select>
-    </div><br>
-    <div class="form_detail">
-    <input type="email" id="std_email" name="std_email" placeholder="E-mail Address" required />
-    </div>
-    <br/>
-    <div class="form_detail">
-    <label>Religion:</label>
-	<select name="std_religion" id="std_religion">
-    	<option value="Chiristanity">Chiristanity</option>
-        <option value="Hindu">Hindu</option>
-        <option value="Islam">Islam</option>
-        <option value="Other">Other</option>
-    </select>
-    </div>
-    <br/>
-    <div class="form_detail">
-    <input type="text" id="std_address" name="std_address" placeholder="Address"  required/>
-    </div>
-    <div class="form_detail">
-    <input type="text" id="std_contact" name="std_contact" placeholder="Contact" required />
-    </div>
-    <div class="form_btn">
-    <input  type="submit" id="btn_std_data_update" name="update" value="Submit" />
-    </div>
-<br/>
-<br/>
-
-</table>
-<!-------search form ---->
-</form>
-
 
 <!---<table border="1px" class="table_style">--->
 <?php
@@ -277,6 +202,7 @@ $.ajax({    //create an ajax request to load_page.php
 
 }
 
+
 function fetch_dataa(){
 	$.getJSON("fetch_std_dataa.php",function(data){
 	$("ul").empty();
@@ -291,6 +217,7 @@ function fetch_dataa(){
 						"</li><li class='li_style'>Email :"+this['Email']+
 						"</li><li class='li_style'>Address :"+this['Address']+
 						"</li><li class='li_style'>Contact :"+this['Contact']+
+						"</li><li class='li_style'>DOB :"+this['DOB']+
 						"</li><li class='li_style'>DOB :"+this['DOB']+
 						"</li><br /><br />");
 		});
@@ -340,7 +267,7 @@ $.ajax({    //create an ajax request to load_page.php
 		type:"GET",
         dataType: "json",                  
         success: function(data){                    
-        	var Id = data[0];              
+        	var Id = data[0].Id;              
         	var FirstName = data[1];
 			var LastName = data[2];
 			var CNIC = data[3];              
@@ -350,6 +277,9 @@ $.ajax({    //create an ajax request to load_page.php
         	var Address = data[7];
 			var Contact = data[8];
 			var DOB = data[9];
+			
+			$('#std_id').val(Id);
+			
 			$('#output').html(
 							"<b>Id: </b>"+Id+
 							"<b> FirstName: </b>"+FirstName+
