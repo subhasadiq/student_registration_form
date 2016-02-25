@@ -15,7 +15,7 @@
 		$monthOfBirth = $_POST['monthOfBirth'];
 		$dateOfBirth = $_POST['dateOfBirth'];
 		// Validate
-		if ($yearOfBirth = '' && $monthOfBirth = '' && $dateOfBirth = '') {
+		if (empty($yearOfBirth)){
 			// Generate date of birth in format of YYYY-mm-dd
 			$date = $yearOfBirth.'-'.$monthOfBirth.'-'.$dateOfBirth;
 		}

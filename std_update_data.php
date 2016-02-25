@@ -6,6 +6,7 @@ $update = mysql_query("SELECT * FROM students WHERE Id  = '$std_id'");
 $row = mysql_fetch_array($update);
 $result = array();
 
+
 	array_push($result, array(  'Id' => $row[0],
 								'FirstName' => $row[1],
 								'LastName' => $row[2],

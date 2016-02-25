@@ -4,12 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Student Registration Form</title>
 <link href="css/stylesheet.css" type="text/css" rel="stylesheet"  />
+<link rel="stylesheet" href="css/bootstrap.min.css">
 
 <script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
-<div class="container">
+<div class="container_wrapper">
 <h1 class="reg_heading">Fill Your Information</h1>
 <div class="form_image">
 	<img src="images/images.png" alt="image not found"/>
@@ -33,25 +35,25 @@
     <br/>
     <div class="form_detail">
     <label>Gender:</label>
-    <input type = "radio" id = "std_gender" name = "std_gender"  value = "Female" required><gender>Female</gender>
-	<input type = "radio" id = "std_gender" name = "std_gender" value = "Male" required><gender>Male</gender>
+    <input type = "radio" id = "std_gender_female" name = "std_gender"  value = "Female" required><gender>Female</gender>
+	<input type = "radio" id = "std_gender_male" name = "std_gender" value = "Male" required><gender>Male</gender>
     </div>
     <br/>
     <div class="form_detail">
     <label>Date of Birth:</label>
-    <select id = "DOB" name="yearOfBirth" require>
+    <select id = "year" name="yearOfBirth" require>
 		<option value="">Year</option>
 			<?php for ($i = 1980; $i < date('Y'); $i++) : ?>
 		<option value="<?php echo $i; ?>"><?php echo $i; ?></option>
 			<?php endfor; ?>
 	</select>
-	<select id = "DOB" name="monthOfBirth">
+	<select id = "month" name="monthOfBirth">
 		<option value="">Month</option>
 			<?php for ($i = 1; $i <= 12; $i++) : ?>
 		<option value="<?php echo ($i < 10) ? '0'.$i : $i; ?>"><?php echo $i; ?></option>
 			<?php endfor; ?>
 	</select>
-	<select id = "DOB" name="dateOfBirth">
+	<select id = "day" name="dateOfBirth">
 		<option value="">Date</option>
 			<?php for ($i = 1; $i <= 31; $i++) : ?>
 		<option value="<?php echo ($i < 10) ? '0'.$i : $i; ?>"><?php echo $i; ?></option>
@@ -114,17 +116,33 @@
 <div class="table_div">
 <h1>Students Records</h1>
 <input type="button" id="btn_std_data_dis" value="display all value" >
+<table class="table" id="fetch_data">
+    	<thead>
+            <tr>
+                <th>Id</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>CNIC</th>
+                <th>Gender</th>
+                <th>Religion</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Contact</th>
+                <th>DOB</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="fetch_data_tbody" >
+      
+        </tbody>
+</table>
 
-<ul id="fetch_data">
-<li class="li_style"></li>
-</ul>
-<div id="output">
 </div>
 
 
-
 <!----------update form------------->
-
+<div id="output">
+</div>
 
 
 <!---<table border="1px" class="table_style">--->
@@ -205,21 +223,21 @@ $.ajax({    //create an ajax request to load_page.php
 
 function fetch_dataa(){
 	$.getJSON("fetch_std_dataa.php",function(data){
-	$("ul").empty();
+	//$("table").empty();
 	$.each(data, function(){
-		$("#fetch_data").append(
-						"<li class='li_style'>Id "+this['Id']+
-						"</li><li class='li_style'>FirstName :"+this['FirstName']+
-						"</li><li class='li_style'>LastName :"+this['LastName']+
-						"</li><li class='li_style'>CNIC :"+this['CNIC']+
-						"</li><li class='li_style'>Gender :"+this['Gender']+
-						"</li><li class='li_style'>Religion :"+this['Religion']+
-						"</li><li class='li_style'>Email :"+this['Email']+
-						"</li><li class='li_style'>Address :"+this['Address']+
-						"</li><li class='li_style'>Contact :"+this['Contact']+
-						"</li><li class='li_style'>DOB :"+this['DOB']+
-						"</li><li class='li_style'>DOB :"+this['DOB']+
-						"</li><br /><br />");
+		$("#fetch_data_tbody").append(
+						"<tr><td> "+this['Id']+
+						"</td><td> "+this['FirstName']+
+						"</td><td> "+this['LastName']+
+						"</td><td> "+this['CNIC']+
+						"</td><td> "+this['Gender']+
+						"</td><td> "+this['Religion']+
+						"</td><td> "+this['Email']+
+						"</td><td> "+this['Address']+
+						"</td><td> "+this['Contact']+
+						"</td><td> "+this['DOB']+
+						"</td><td> <button onclick='delete_std_data("+this['Id']+")'>Delete</button>"+" <button onclick='update_std_data("+this['Id']+")'>Edit</button>"+
+						"</td></tr><br /><br />");
 		});
 	});
 
@@ -261,6 +279,7 @@ $.ajax({    //create an ajax request to load_page.php
 }
 
 function update_std_data(id){
+	
 $.ajax({    //create an ajax request to load_page.php
         url: "std_update_data.php?Id="+id,             
 		data:"",
@@ -268,18 +287,38 @@ $.ajax({    //create an ajax request to load_page.php
         dataType: "json",                  
         success: function(data){                    
         	var Id = data[0].Id;              
-        	var FirstName = data[1];
-			var LastName = data[2];
-			var CNIC = data[3];              
-        	var Gender = data[4];
-			var Religion = data[5];
-			var Email = data[6];              
-        	var Address = data[7];
-			var Contact = data[8];
-			var DOB = data[9];
+        	var FirstName = data[0].FirstName;
+			var LastName = data[0].LastName;
+			var CNIC = data[0].CNIC;              
+        	var Gender = data[0].Gender;
+			var Religion = data[0].Religion;
+			var Email = data[0].Email;              
+        	var Address = data[0].Address;
+			var Contact = data[0].Contact;
+			var DOB = data[0].DOB;
+			if(Gender=="Male"){
+				$('#std_gender_male').attr('checked', true);
+				}
+				else{
+					$('#std_gender_female').attr('checked', true);
+					}
+			
+			var dates = DOB.split("-");
 			
 			$('#std_id').val(Id);
+			$('#std_fname').val(FirstName);
+			$('#std_lname').val(LastName);
+			$('#std_cnic').val(CNIC);
+			$('#std_religion').val(Religion);
+			$('#std_email').val(Email);
+			$('#std_address').val(Address);
+			$('#std_contact').val(Contact);
+			$('#std_dob').val(DOB);
 			
+			$('#year').val(dates[0]);
+			$('#month').val(dates[1]);
+			$('#day').val(dates[2]);
+
 			$('#output').html(
 							"<b>Id: </b>"+Id+
 							"<b> FirstName: </b>"+FirstName+
@@ -324,6 +363,8 @@ $(document).ready(function() {
 	$('#btn_std_data_search').click(function(){
 		search_std_data();		
 	});
+	
+	
 	
 	
 });
