@@ -82,6 +82,7 @@
     </div>
     <div class="form_btn">
     <input  type="button" id="btn_std_data_submit" name="submit" value="Submit" />
+    <input  type="button" id="btn_std_data_update" name="update" value="Update" />
     </div>
 <br/>
 <br/>
@@ -102,12 +103,13 @@
 
 
 <!---------------Show on web page or fetch from database ----->
+<!----
 <div class="table_div">
 <h1>Students Records</h1>
 <input type="button" id="btn_std_data_display" value="display all value" >
 <div id="responsecontainer">
 </div>
-
+---->
 <!-----------------dlete record-------->
 <div id="message"></div>
 <div id="messages"></div>
@@ -236,7 +238,8 @@ function fetch_dataa(){
 						"</td><td> "+this['Address']+
 						"</td><td> "+this['Contact']+
 						"</td><td> "+this['DOB']+
-						"</td><td> <button onclick='delete_std_data("+this['Id']+")'>Delete</button>"+" <button onclick='update_std_data("+this['Id']+")'>Edit</button>"+
+						"</td><td> <button onclick='delete_std_data("+this['Id']+")'>Delete</button>"
+						+" <button onclick='fetch_form_value_std("+this['Id']+")'>Edit</button>"+
 						"</td></tr><br /><br />");
 		});
 	});
@@ -278,10 +281,10 @@ $.ajax({    //create an ajax request to load_page.php
     });
 }
 
-function update_std_data(id){
+function fetch_form_value_std(id){
 	
 $.ajax({    //create an ajax request to load_page.php
-        url: "std_update_data.php?Id="+id,             
+        url: "std_fetch_form_value.php?Id="+id,             
 		data:"",
 		type:"GET",
         dataType: "json",                  
@@ -338,6 +341,21 @@ $.ajax({    //create an ajax request to load_page.php
 
 }
 
+//update std data
+function update_std_data(){
+	var update_data = $('#form_std_reg').serialize();
+$.ajax({    //create an ajax request to load_page.php
+        url: "std_update.php",             
+		type: "GET",
+		data: update_data,
+        dataType: "html",   //expect html to be returned                
+        success: function(response){ 
+            console.log(response);
+        }
+
+    });
+}
+
 
 $(document).ready(function() {
 	
@@ -364,7 +382,10 @@ $(document).ready(function() {
 		search_std_data();		
 	});
 	
-	
+	//update std data
+	$('#btn_std_data_update').click(function(){
+		update_std_data();		
+	});
 	
 	
 });
